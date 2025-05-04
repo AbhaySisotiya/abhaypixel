@@ -27,7 +27,7 @@ const SignupUser = async(req,res) => {
         const user = new UserModel({firstName,lastName,email,password:hashedPassword});
         await user.save();
 
-        res.json({success:true,message:"User Register Successfully",data:user})
+        res.json({success:true,message:"User Register Successfully"})
     
     }catch(error){
         console.log(error);
@@ -55,7 +55,8 @@ const LoginUser = async(req,res) => {
             return res.json({success:false,message:"Invalid email or Password"});
         }
 
-        token = jwt.sign({userid:user._id,email:user.email},secret_key,{expiresIn:'1h'})
+        // token = jwt.sign({userid:user._id,email:user.email},secret_key,{expiresIn:'1h'})
+        token = jwt.sign({userid:user._id,email:user.email},secret_key);
 
         res.json({success:true,token:token});
 
