@@ -10,7 +10,7 @@ const {islogin} = useAuth()
   return (
     <header className="container header">
         <Link to="/" className="logo">
-            <img src="logo.png" alt="abhaypixel" />
+            <img src="/logo.png" alt="abhaypixel" />
         </Link>
         <nav>
             <ul className="navbar">

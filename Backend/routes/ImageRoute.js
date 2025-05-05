@@ -2,13 +2,15 @@ const express = require("express");
 const route = express.Router();
 const AuthCheck = require("../middlewares/AuthMiddleware");
 const ImageController = require("../controllers/ImageController");
-const upload = require("../middlewares/UploadMiddleware");
+const multer = require("multer")
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 route.post(
-  "/compress",
+  "/convert",
   AuthCheck,
   upload.single("image"),
-  ImageController.CompressImage
+  ImageController.ConvertImage
 );
 
 

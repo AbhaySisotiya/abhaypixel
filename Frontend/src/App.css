@@ -57,6 +57,10 @@ li{
     gap: 3rem;
 }
 
+.navbar a{
+    white-space:nowrap;
+}
+
 .hero-section{
     display: flex;
     justify-content: center;
@@ -115,6 +119,7 @@ li{
     justify-content: center;
     padding: 1.7rem 2rem;
     background-color: var(--secondary-color);
+    cursor: pointer;
 }
 
 .btn:active{
@@ -156,11 +161,14 @@ li{
 
  /* form */
 
+ .form{
+    padding: 2rem;
+ }
  .card
  {
     background-color: rgba(0, 0, 0, 0.151);
-    padding: 3rem;
     margin: 0 auto;
+    padding: 3rem;
     font-size: 1.4rem;
     max-width: 600px;
     width: 100%;
@@ -182,12 +190,12 @@ li{
     border-radius: 50%
 
  }
- .card .card-heading{
+.card-heading{
     position: relative;
     font-size: 1.6rem;
     margin-bottom: 4rem;
 }
-.card .line{
+.card-heading .line{
     position: absolute;
     top: 4rem;
     left: 0;
@@ -229,5 +237,192 @@ li{
     font-size: 1.4rem;
     color: #021526;
     border-radius: 7px;
+    cursor: pointer;
     width: 100%;
+    text-align: center;
 }
+.card-btn:hover{
+    background-color: #5889ae;
+}
+.card-btn:active{
+    scale: 0.98;
+    background-color: #5889ae;
+}
+.card-btn:disabled{
+    cursor:not-allowed;
+}
+
+/* service */
+
+.service-card .line{
+    width: 20%;
+}
+
+.services{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(350px,1fr));
+    gap: 2rem;
+    margin-top: 6rem;
+}
+
+.service{
+    font-size: 1.4rem;
+    border-radius: 10px;
+    padding: 2.2rem;
+    background-color: rgba(255,255,255,0.1);
+    backdrop-filter: blur(200px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+
+
+.service::before{
+    content: "";
+    position: absolute;
+    top: 5%;
+    right: 10%;
+    width: 80px;
+    height: 80px;
+    background: var(--soft-bg-color);
+    filter: blur(70px);
+    border-radius: 50%
+ }
+
+ .service .service-title{
+    font-size: 1.9rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.service-img img{
+    width: 30px;
+    height: 30px;
+    filter: fil;
+}
+
+
+.service:hover{
+    background-color: #022147;
+    border: 1px solid #074b9d;
+    transform: skew(-1deg) scale(1.04);
+}
+.service:active{
+    background-color: #01162e;
+    scale: 0.97;
+}
+
+.service .bedge{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(125, 234, 125, 0.769);
+    border: 1px solid green;
+    border-radius: 50px;
+    padding: 5px 20px;
+    color: rgba(13, 119, 13, 0.991);
+}
+
+@media screen and (max-width:476px) {
+    .services{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-top: 6rem;
+    }
+
+}
+
+.point:nth-child(2){
+    margin-top: 6rem;
+}
+
+.point{
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+.point span{
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+/* footer */
+
+
+.footer-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer{
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    font-size:1.7rem;
+}
+
+.footer .logo{
+    display: flex;
+    justify-content: center;
+}
+.footer-section p{
+    font-size: 1.7rem;
+}
+
+.convert{
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    position: relative;
+}
+
+.convert::before{
+    position: absolute;
+    content: "";
+    top: 0%;
+    right: 0%;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    filter: blur(200px);
+    height: 500px;
+    background-color: var(--soft-bg-color);
+    z-index: -1;
+}
+.convert .title{
+    font-size: 3rem;
+}
+
+.browse-box{
+    padding: 10rem;
+    border: 2px dashed #ff591c;
+    cursor: pointer;
+    font-size: 1.7rem;
+    border-radius: 20px;
+    background-color: #ff591c45;
+}
+
+.form-control{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+input[type="file"] {
+   display: none;
+  }
+
+  .convert .card-btn{
+        max-width: 300px;
+  }

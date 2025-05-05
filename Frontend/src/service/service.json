@@ -1,0 +1,30 @@
+[
+     {
+        "id": 1,
+        "title":"Convert To JPG",
+        "desc":"Convert Any Format (PNG, WEBP, AVIF) Image into JPG",
+        "bedge":"",
+        "type":"jpg"
+    },
+    {
+        "id": 2,
+        "title":"Convert To PNG",
+        "desc":"Convert Any Format (JPG, WEBP, AVIF) Image into PNG",
+        "bedge":"",
+        "type":"png"
+    },
+    {
+        "id": 3,
+        "title":"Convert To WEBP",
+        "desc":"Convert Any Format (JPG, PNG, AVIF) Image into WEBP",
+        "bedge":"",
+        "type":"webp"
+    },
+    {
+        "id": 4,
+        "title":"Convert To AVIF",
+        "desc":"Convert Any Format (JPG, PNG, WEBP) Image into AVIF",
+        "bedge":"",
+        "type":"avif"
+    }
+]

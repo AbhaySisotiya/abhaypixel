@@ -11,11 +11,14 @@ const AuthCheck = (req,res,next) => {
     }
 
     try{
+        
         const token = authHeaderValue.split(" ")[1];
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         req.user = decoded;
         next();
-    }catch(error){
+
+
+    }catch(error){  
         return res.json({success:false, message: 'Token is not valid' });
     }
 }

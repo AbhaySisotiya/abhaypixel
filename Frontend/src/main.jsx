@@ -13,6 +13,7 @@ import Login from './pages/Login.jsx';
 import Profile from './pages/Profile.jsx';
 import ProtectedRoutes from './service/ProtectedRoutes.jsx';
 import { AuthProvider } from './Hooks/useAuth.jsx';
+import Convert from './pages/Convert.jsx';
 
 
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element:<ProtectedRoutes><Profile/></ProtectedRoutes>,
+      },
+      {
+        path: "/service/convert/:type",
+        element:<ProtectedRoutes><Convert /></ProtectedRoutes>,
       },
     ],
   },
