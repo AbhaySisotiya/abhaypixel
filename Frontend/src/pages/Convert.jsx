@@ -13,9 +13,10 @@ const Convert = () => {
   const [ImagePreview, setImagePreview] = useState(null);
   const [isUploading, setisUploading] = useState(false);
 
-  useEffect(() => {
+
+  useEffect(()=>{
     if (!allowedFormats.includes(type)) navigate("/");
-  }, [type]);
+  },[type])
 
   const HandleFileChange = (e) => {
     const file = e.target.files[0];
@@ -28,17 +29,25 @@ const Convert = () => {
     e.preventDefault();
     setisUploading(true);
 
-    if (file == null) {
+    if (!file) {
       setisUploading(false);
-      return toast.error("Select Any image");
-    } else {
-      let Filetype = file.type.split("/")[1];
-      if (Filetype === "jpeg") Filetype = "jpg";
+      return toast.error("Select an image file.");
+    }
 
-      if (Filetype == type) {
-        setisUploading(false);
-        return toast.error(`Already ${type} File`);
-      }
+    let Filetype = file.type.split("/")[1];
+    if (Filetype === "jpeg") Filetype = "jpg";
+
+
+    if (Filetype === type) {
+      setisUploading(false);
+      return toast.error(`Already a .${type} file`);
+    }
+
+    if (!allowedFormats.includes(Filetype)) {
+      setisUploading(false);
+      return toast.error("Unsupported image format.");
+    }
+
 
       try {
         const formData = new FormData();
@@ -51,19 +60,22 @@ const Convert = () => {
           });
        
         const blob = res.data;
-        console.log(blob);
         
         const imageURL = URL.createObjectURL(blob);
         setTimeout(() => {
           setImagePreview(imageURL);
           setisUploading(false);
-        }, 5000);
+        }, 2000);
       } catch (error) {
         console.log(error);
-        
-        return toast.error("Uploading Error: ", error);
+        if (error.response && error.response.data) {
+          toast.error(`Server Error: ${error.response.data.message || "Conversion failed"}`);
+        } else {
+          toast.error("Network or Server Error. Please try again.");
+        }
+        setisUploading(false);
       }
-    }
+    
   };
 
   return (
