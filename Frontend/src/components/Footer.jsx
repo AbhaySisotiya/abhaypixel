@@ -9,6 +9,7 @@ function Footer() {
         </Link>
       </div>
         <p> © 2025 AbhayPixel. All rights reserved.</p>
+        <p>Develope By <Link  style={{color:"#5097FF"}} target='_blank' to={"https://www.linkedin.com/in/abhaysisotiya/"}>Abhay Sisotiya</Link></p>
     </footer>
   )
 }
