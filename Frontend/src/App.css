@@ -426,3 +426,15 @@ input[type="file"] {
   .convert .card-btn{
         max-width: 300px;
   }
+
+.new-text{
+
+    font-size: 2.2rem;
+    margin: 2rem 0;
+    text-align: right;
+}
+
+.new-text-color{
+    margin-left: 1rem;
+    color:#0073ff;
+}

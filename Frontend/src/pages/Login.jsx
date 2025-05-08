@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "../components/ui/Input";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth.jsx";
 import api from "../service/Api.js";
 
@@ -71,6 +71,7 @@ function Login() {
 
           <button className="card-btn">submit</button>
         </form>
+        <p className="new-text">Create An New Account ? <Link className="new-text-color" to={"/signup"}>Signup</Link></p>
       </div>
     </div>
   );

@@ -3,8 +3,11 @@ import Input from "../components/ui/Input";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../service/Api";
+import {Link,useNavigate} from 'react-router-dom'
 
 function Signup() {
+
+  const navigate = useNavigate();
   const [formdata, setformdata] = useState({
     firstName: "",
     lastName: "",
@@ -22,7 +25,7 @@ function Signup() {
           return toast.error(res.data.message);
         }
         if (res.data.success) {
-          return toast.success(res.data.message);
+          return navigate("/login");
         }
       })
       .catch((error) => console.log(error));
@@ -80,6 +83,8 @@ function Signup() {
 
           <button className="card-btn">submit</button>
         </form>
+        <p className="new-text">Already Have an Account ? <Link className="new-text-color" to={"/login"}>login Here</Link></p>
+
       </div>
     </div>
   );
