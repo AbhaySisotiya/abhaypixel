@@ -1,17 +1,19 @@
+import { Outlet } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { HelmetProvider } from "react-helmet-async";
 
-import { Outlet } from 'react-router-dom'
-import './App.css'
-import Header from './components/Header'
-import Footer from './components/Footer'
 function App() {
-
   return (
     <>
-      <Header />
-      <Outlet />
-      <Footer />
+      <HelmetProvider>
+        <Header />
+        <Outlet />
+        <Footer />
+      </HelmetProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

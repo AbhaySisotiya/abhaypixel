@@ -3,10 +3,9 @@ import Input from "../components/ui/Input";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../service/Api";
-import {Link,useNavigate} from 'react-router-dom'
-
+import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 function Signup() {
-
   const navigate = useNavigate();
   const [formdata, setformdata] = useState({
     firstName: "",
@@ -38,6 +37,9 @@ function Signup() {
 
   return (
     <div className="form">
+      <Helmet>
+        <title>SignUp | AbhayPixel</title>
+      </Helmet>
       <div className="card">
         <div className="card-heading">
           <h2>Signup From</h2>
@@ -83,8 +85,12 @@ function Signup() {
 
           <button className="card-btn">submit</button>
         </form>
-        <p className="new-text">Already Have an Account ? <Link className="new-text-color" to={"/login"}>login Here</Link></p>
-
+        <p className="new-text">
+          Already Have an Account ?{" "}
+          <Link className="new-text-color" to={"/login"}>
+            login Here
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import api from "../service/Api";
 import { useAuth } from "../Hooks/useAuth";
+import { Helmet } from "react-helmet-async";
 
 const Convert = () => {
   const { type } = useParams();
@@ -13,10 +14,9 @@ const Convert = () => {
   const [ImagePreview, setImagePreview] = useState(null);
   const [isUploading, setisUploading] = useState(false);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     if (!allowedFormats.includes(type)) navigate("/");
-  },[type])
+  }, [type]);
 
   const HandleFileChange = (e) => {
     const file = e.target.files[0];
@@ -37,7 +37,6 @@ const Convert = () => {
     let Filetype = file.type.split("/")[1];
     if (Filetype === "jpeg") Filetype = "jpg";
 
-
     if (Filetype === type) {
       setisUploading(false);
       return toast.error(`Already a .${type} file`);
@@ -48,42 +47,49 @@ const Convert = () => {
       return toast.error("Unsupported image format.");
     }
 
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("type", type);
 
-      try {
-        const formData = new FormData();
-        formData.append("image", file);
-        formData.append("type", type); 
+      const res = await api.post("/api/image/convert", formData, {
+        headers: { authorization: "Bearer " + token },
+        responseType: "blob",
+      });
 
-          const res = await api.post("/api/image/convert", formData, {
-            headers: { authorization: "Bearer " + token },
-            responseType: "blob",
-          });
-       
-        const blob = res.data;
-        
-        const imageURL = URL.createObjectURL(blob);
-        setTimeout(() => {
-          setImagePreview(imageURL);
-          setisUploading(false);
-        }, 2000);
-      } catch (error) {
-        console.log(error);
-        if (error.response && error.response.data) {
-          toast.error(`Server Error: ${error.response.data.message || "Conversion failed"}`);
-        } else {
-          toast.error("Network or Server Error. Please try again.");
-        }
+      const blob = res.data;
+
+      const imageURL = URL.createObjectURL(blob);
+      setTimeout(() => {
+        setImagePreview(imageURL);
         setisUploading(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.data) {
+        toast.error(
+          `Server Error: ${error.response.data.message || "Conversion failed"}`
+        );
+      } else {
+        toast.error("Network or Server Error. Please try again.");
       }
-    
+      setisUploading(false);
+    }
   };
 
   return (
     <section className="container convert">
+      <Helmet>
+        <title>Convert Images Online | AbhayPixel</title>
+        <meta
+          name="description"
+          content="Convert JPG PNG WEBP AVIF online for free.No installation required."
+        />
+      </Helmet>
       <ToastContainer />
       <h2 className="title">Convert Image Into {type.toUpperCase()}</h2>
       <form
-       onSubmit={HandleSubmit}
+        onSubmit={HandleSubmit}
         className="form-control"
         method="post"
         encType="multipart/form-data"
@@ -100,13 +106,18 @@ const Convert = () => {
         <h2 className="title">{file?.name}</h2>
 
         {ImagePreview ? (
-            <a className="card-btn" href={ImagePreview} download={`converted.${type}`}>
-              Download
-            </a>
-        ) :  <button type="submit" className="card-btn" disabled={isUploading}>
-         {isUploading ? "Processing...." : "Uplaod"}
-      </button>}
-
+          <a
+            className="card-btn"
+            href={ImagePreview}
+            download={`converted.${type}`}
+          >
+            Download
+          </a>
+        ) : (
+          <button type="submit" className="card-btn" disabled={isUploading}>
+            {isUploading ? "Processing...." : "Uplaod"}
+          </button>
+        )}
       </form>
     </section>
   );

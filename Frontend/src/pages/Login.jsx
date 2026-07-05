@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth.jsx";
 import api from "../service/Api.js";
+import { Helmet } from "react-helmet-async";
 
 function Login() {
   let navigate = useNavigate();
@@ -43,6 +44,9 @@ function Login() {
 
   return (
     <div className="form">
+      <Helmet>
+        <title>Login | AbhayPixel</title>
+      </Helmet>
       <div className="card">
         <div className="card-heading">
           <h2>Login From</h2>
@@ -71,7 +75,12 @@ function Login() {
 
           <button className="card-btn">submit</button>
         </form>
-        <p className="new-text">Create An New Account ? <Link className="new-text-color" to={"/signup"}>Signup</Link></p>
+        <p className="new-text">
+          Create An New Account ?{" "}
+          <Link className="new-text-color" to={"/signup"}>
+            Signup
+          </Link>
+        </p>
       </div>
     </div>
   );

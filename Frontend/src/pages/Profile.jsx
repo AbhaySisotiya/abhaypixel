@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../service/Api";
 import { useAuth } from "../Hooks/useAuth.jsx";
-
+import { Helmet } from "react-helmet-async";
 function Profile() {
   const [users, setusers] = useState({});
   const { token } = useAuth();
@@ -37,6 +37,9 @@ function Profile() {
 
   return (
     <div className="form">
+      <Helmet>
+        <title>Profile | AbhayPixel</title>
+      </Helmet>
       <div
         className="card"
         style={{ display: "flex", flexDirection: "column", gap: "15px" }}
@@ -74,7 +77,7 @@ function Profile() {
                 <li>{users.firstName}</li>
                 <li>{users.lastName}</li>
                 <li>{users.email}</li>
-                <li>{(users.createdAt).split("T")[0]}</li>
+                <li>{users.createdAt.split("T")[0]}</li>
               </div>
             </div>
             <Link
