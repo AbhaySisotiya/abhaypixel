@@ -461,6 +461,7 @@ input[type="file"] {
 .inputbox{
     display:flex;
     font-size: 16px;
+    flex-wrap: wrap;
     gap: 20px;
     align-items: center;
 }

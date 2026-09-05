@@ -42,7 +42,7 @@ const SignupUser = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Internal Server Error" + error,
     });
   }
 };
@@ -73,7 +73,7 @@ const LoginUser = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Internal Server Error" + error,
     });
   }
 };

@@ -12,7 +12,7 @@ function ConvertToPdf() {
   const [ImagePreview, setImagePreview] = useState(null);
   const [files, setfiles] = useState([]);
   const [target, settarget] = useState(null);
-  const [Previews, setPreviews] = useState(null);
+  const [Previews, setPreviews] = useState([]);
 
   const HandleFileChange = (e) => {
     //set file
@@ -93,7 +93,7 @@ function ConvertToPdf() {
             type="number"
             name="target"
             id="target"
-            placeholder="1"
+            placeholder="0"
             min="0"
             max="50"
             step="0.1"
@@ -102,16 +102,18 @@ function ConvertToPdf() {
           />
         </div>
 
-        <div className="preview-container">
-          {Previews?.map((preview, index) => (
+        {Previews?.length > 0 && (
+          <div className="preview-container">
+            {Previews?.map((preview, index) => (
               <img
                 key={preview}
                 src={preview}
                 alt={`Preview ${index + 1}`}
                 className="preview-image"
               />
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {ImagePreview ? (
           <a
