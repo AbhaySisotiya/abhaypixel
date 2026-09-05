@@ -11,7 +11,7 @@ import Profile from "./pages/Profile.jsx";
 import ProtectedRoutes from "./service/ProtectedRoutes.jsx";
 import { AuthProvider } from "./Hooks/useAuth.jsx";
 import Convert from "./pages/Convert.jsx";
-import ConvertToPdf from "./pages/convertToPdf.jsx";
+import ConvertToPdf from "./pages/ConvertToPdf.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
