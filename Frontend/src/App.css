@@ -438,3 +438,48 @@ input[type="file"] {
     margin-left: 1rem;
     color:#0073ff;
 }
+
+.error{
+    font-size: 15px;
+    margin-bottom: 9px;
+    text-align: right;
+    color: tomato;
+}
+
+.btn{
+    font-size: 16px;
+}
+
+.btn-download{
+    background-color: lightgreen;
+    border: 2px solid darkgreen;
+}
+
+.btn-download:hover{
+    background-color: rgb(103, 225, 103);
+}
+.inputbox{
+    display:flex;
+    font-size: 16px;
+    gap: 20px;
+    align-items: center;
+}
+
+.inputbox input{
+    width: 20%;
+    outline: none;
+    border: 2px solid whitesmoke;
+    font-size: 21px;
+    padding: 7px;
+}
+
+.preview-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.preview-image{
+    width: 80px;
+    height: 90px;
+    border-radius: 7px;
+}

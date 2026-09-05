@@ -6,19 +6,32 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Hooks/useAuth.jsx";
 import api from "../service/Api.js";
 import { Helmet } from "react-helmet-async";
-
+import { useFormik } from "formik";
+import { loginschema } from "../schema/index.jsx";
 function Login() {
   let navigate = useNavigate();
   const { setToken } = useAuth();
 
-  const [formdata, setformdata] = useState({
+  const initialValues = {
     email: "",
     password: "",
+  };
+
+  const {
+    handleBlur,
+    handleChange,
+    handleReset,
+    handleSubmit,
+    values,
+    errors,
+  } = useFormik({
+    initialValues,
+    validationSchema: loginschema,
+    onSubmit: function (values) {
+      HandleLoginsubmit(values);
+    },
   });
-
-  const Handlesubmit = (e) => {
-    e.preventDefault();
-
+  const HandleLoginsubmit = (formdata) => {
     api
       .post("api/auth/login", formdata)
       .then((res) => {
@@ -37,11 +50,6 @@ function Login() {
       .catch((error) => console.log(error));
   };
 
-  const Handlechange = (e) => {
-    const { name, value } = e.target;
-    setformdata((prev) => ({ ...prev, [name]: value }));
-  };
-
   return (
     <div className="form">
       <Helmet>
@@ -54,26 +62,34 @@ function Login() {
         </div>
         <ToastContainer />
 
-        <form method="post" onSubmit={Handlesubmit}>
+        <form method="post" onSubmit={handleSubmit}>
           <Input
             type="email"
             name="email"
             id="email"
             placeholder="Enter email"
-            value={formdata.email}
-            onchange={Handlechange}
+            value={values.email}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
+
+          <p className="error">{errors && errors.email}</p>
 
           <Input
             type="password"
             name="password"
             id="password"
             placeholder="Enter password"
-            value={formdata.password}
-            onchange={Handlechange}
+            value={values.password}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
 
-          <button className="card-btn">submit</button>
+          <p className="error">{errors && errors.password}</p>
+
+          <button type="submit" className="card-btn">
+            submit
+          </button>
         </form>
         <p className="new-text">
           Create An New Account ?{" "}

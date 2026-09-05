@@ -1,22 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import ErrorPage from './pages/ErrorPage.jsx';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import Home from './pages/Home.jsx';
-import Signup from './pages/Signup.jsx';
-import Login from './pages/Login.jsx';
-import Profile from './pages/Profile.jsx';
-import ProtectedRoutes from './service/ProtectedRoutes.jsx';
-import { AuthProvider } from './Hooks/useAuth.jsx';
-import Convert from './pages/Convert.jsx';
-
-
-
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home.jsx";
+import Signup from "./pages/Signup.jsx";
+import Login from "./pages/Login.jsx";
+import Profile from "./pages/Profile.jsx";
+import ProtectedRoutes from "./service/ProtectedRoutes.jsx";
+import { AuthProvider } from "./Hooks/useAuth.jsx";
+import Convert from "./pages/Convert.jsx";
+import ConvertToPdf from "./pages/convertToPdf.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,26 +28,40 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element:<Login />,
+        element: <Login />,
       },
       {
         path: "/profile",
-        element:<ProtectedRoutes><Profile/></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <Profile />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/service/convert/:type",
-        element:<ProtectedRoutes><Convert /></ProtectedRoutes>,
+        element: (
+          <ProtectedRoutes>
+            <Convert />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/service/convertToPdf",
+        element: (
+          <ProtectedRoutes>
+            <ConvertToPdf />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },
 ]);
 
-
-
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </AuthProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);

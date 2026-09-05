@@ -5,20 +5,33 @@ import { ToastContainer, toast } from "react-toastify";
 import api from "../service/Api";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useFormik } from "formik";
+import { signupschema } from "../schema/index.jsx";
+
 function Signup() {
   const navigate = useNavigate();
-  const [formdata, setformdata] = useState({
+
+  const initialValues = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  });
+    confirmPassword: "",
+  };
 
-  const Handlesubmit = (e) => {
-    e.preventDefault();
+  const { handleChange, handleBlur, resetForm, handleSubmit, values, errors } =
+    useFormik({
+      initialValues,
+      validationSchema: signupschema,
+      onSubmit: (values) => {
+        Handlesformsubmit(values, resetForm);
+        console.log(values);
+      },
+    });
 
+  const Handlesformsubmit = (data, resetForm) => {
     api
-      .post("api/auth/signup", formdata)
+      .post("api/auth/signup", data)
       .then((res) => {
         if (!res.data.success) {
           return toast.error(res.data.message);
@@ -28,11 +41,6 @@ function Signup() {
         }
       })
       .catch((error) => console.log(error));
-  };
-
-  const Handlechange = (e) => {
-    const { name, value } = e.target;
-    setformdata((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -46,44 +54,68 @@ function Signup() {
           <div className="line"></div>
         </div>
         <ToastContainer />
-        <form method="post" onSubmit={Handlesubmit}>
+        <form method="post" onSubmit={handleSubmit}>
           <Input
             type="text"
             name="firstName"
             id="firstName"
             placeholder="Enter FirstName"
-            value={formdata.firstName}
-            onchange={Handlechange}
+            value={values.firstName}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
+          <p className="error">{errors && errors.firstName}</p>
 
           <Input
             type="text"
             name="lastName"
             id="lastName"
             placeholder="Enter lastName"
-            value={formdata.lastName}
-            onchange={Handlechange}
+            value={values.lastName}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
+
+          <p className="error">{errors && errors.lastName}</p>
 
           <Input
             type="email"
             name="email"
             id="email"
             placeholder="Enter email"
-            value={formdata.email}
-            onchange={Handlechange}
+            value={values.email}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
+          <p className="error">{errors && errors.email}</p>
 
           <Input
             type="password"
             name="password"
             id="password"
             placeholder="Enter password"
-            value={formdata.password}
-            onchange={Handlechange}
+            value={values.password}
+            onchange={handleChange}
+            onblur={handleBlur}
           />
 
-          <button className="card-btn">submit</button>
+          <p className="error">{errors && errors.password}</p>
+
+          <Input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            placeholder="Enter confirm Password"
+            value={values.confirmPassword}
+            onchange={handleChange}
+            onblur={handleBlur}
+          />
+
+          <p className="error">{errors && errors.confirmPassword}</p>
+
+          <button type="submit" className="card-btn">
+            submit
+          </button>
         </form>
         <p className="new-text">
           Already Have an Account ?{" "}

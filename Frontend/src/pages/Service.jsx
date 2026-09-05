@@ -14,7 +14,14 @@ function Service() {
         <div className="services">
           {services.map((s) => {
             return (
-              <ServiceCard key={s.id} type={s.type} title={s.title} desc={s.desc} bedge={s.bedge} />
+              <ServiceCard
+                key={s.id}
+                type={s.type}
+                title={s.title}
+                desc={s.desc}
+                bedge={s.bedge}
+                ref={s.ref}
+              />
             );
           })}
         </div>

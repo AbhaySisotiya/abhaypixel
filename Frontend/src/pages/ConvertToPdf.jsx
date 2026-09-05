@@ -5,67 +5,48 @@ import api from "../service/Api";
 import { useAuth } from "../Hooks/useAuth";
 import { Helmet } from "react-helmet-async";
 
-const Convert = () => {
-  const { type } = useParams();
+function ConvertToPdf() {
   const { token } = useAuth();
   const navigate = useNavigate();
-  const allowedFormats = ["jpg", "png", "webp", "avif"];
-  const [file, setFile] = useState(null);
-  const [ImagePreview, setImagePreview] = useState(null);
   const [isUploading, setisUploading] = useState(false);
-
-  useEffect(() => {
-    if (!allowedFormats.includes(type)) navigate("/");
-  }, [type]);
+  const [ImagePreview, setImagePreview] = useState(null);
+  const [files, setfiles] = useState([]);
+  const [target, settarget] = useState(null);
+  const [Previews, setPreviews] = useState(null);
 
   const HandleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFile(file);
-    setImagePreview(null);
+    //set file
+    setfiles(Array.from(e.target.files));
     setisUploading(false);
+
+    //preview file
+    const previewUrls = Array.from(e.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setPreviews(previewUrls);
   };
 
-  const HandleSubmit = async (e) => {
+  const handleImages = async (e) => {
     e.preventDefault();
-    setisUploading(true);
 
-    if (!file) {
-      setisUploading(false);
-      return toast.error("Select an image file.");
-    }
+    const formdata = new FormData();
+    Array.from(files).forEach((file) => {
+      formdata.append("images", file);
+    });
 
-    let Filetype = file.type.split("/")[1];
-    if (Filetype === "jpeg") Filetype = "jpg";
-
-    if (Filetype === type) {
-      setisUploading(false);
-      return toast.error(`Already a .${type} file`);
-    }
-
-    if (!allowedFormats.includes(Filetype)) {
-      setisUploading(false);
-      return toast.error("Unsupported image format.");
-    }
-
+    if (target) formdata.append("target", target);
     try {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("type", type);
-
-      const res = await api.post("/api/image/convert", formData, {
+      setisUploading(true);
+      const res = await api.post("/api/image/converttopdf", formdata, {
         headers: { authorization: "Bearer " + token },
         responseType: "blob",
       });
 
-      const blob = res.data;
+      const pdfUrl = URL.createObjectURL(res.data);
 
-      const imageURL = URL.createObjectURL(blob);
-      setTimeout(() => {
-        setImagePreview(imageURL);
-        setisUploading(false);
-      }, 2000);
+      setImagePreview(pdfUrl);
+      setisUploading(false);
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.data) {
         toast.error(
           `Server Error: ${error.response.data.message || "Conversion failed"}`
@@ -87,9 +68,9 @@ const Convert = () => {
         />
       </Helmet>
       <ToastContainer />
-      <h2 className="title">Convert Image Into {type.toUpperCase()}</h2>
+      <h2 className="title">Convert Images Into PDF</h2>
       <form
-        onSubmit={HandleSubmit}
+        onSubmit={handleImages}
         className="form-control"
         method="post"
         encType="multipart/form-data"
@@ -101,19 +82,42 @@ const Convert = () => {
           id="image"
           type="file"
           name="image"
+          multiple
           onChange={HandleFileChange}
         ></input>
-        <h2 className="title">{file?.name}</h2>
+        <div className="inputbox">
+          <label htmlFor="target">
+            If you Want to Compress into specific Size (in MB)
+          </label>
+          <input
+            type="number"
+            name="target"
+            id="target"
+            placeholder="1"
+            min="0"
+            max="50"
+            step="0.1"
+            value={target || ""}
+            onChange={(e) => settarget(e.target.value)}
+          />
+        </div>
+
+        <div className="preview-container">
+          {Previews?.map((preview, index) => (
+              <img
+                key={preview}
+                src={preview}
+                alt={`Preview ${index + 1}`}
+                className="preview-image"
+              />
+          ))}
+        </div>
 
         {ImagePreview ? (
           <a
             className="card-btn btn btn-download"
             href={ImagePreview}
-            download={`${
-              file?.name
-                ? file?.name.substring(0, file.name.lastIndexOf("."))
-                : "converted"
-            }__By_Abhaypixel.${type}`}
+            download={`Abhaypixel.pdf`}
           >
             Download
           </a>
@@ -125,6 +129,6 @@ const Convert = () => {
       </form>
     </section>
   );
-};
+}
 
-export default Convert;
+export default ConvertToPdf;

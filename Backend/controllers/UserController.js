@@ -1,87 +1,94 @@
-const express  = require("express")
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const UserModel = require("../models/UserModel")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const UserModel = require("../models/UserModel");
 require("dotenv").config();
 
 const secret_key = process.env.SECRET_KEY;
 
-const SignupUser = async(req,res) => {
+const SignupUser = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
 
-    try{
-        const {firstName,lastName,email,password} = req.body;
-       
-
-        if(!firstName || !lastName || !email.trim() || !password) {
-            return res.json({success:false,message:"All field Must Required.."})
-        }
-
-        const ExistingUser = await UserModel.findOne({email:email});
-        if(ExistingUser) return res.json({success:false,message:"User already Exists"})
-
-
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-
-        const user = new UserModel({firstName,lastName,email,password:hashedPassword});
-        await user.save();
-
-        res.json({success:true,message:"User Register Successfully"})
-    
-    }catch(error){
-        console.log(error);
-        res.status(400).json({success:false,message:"Internal Server Error : "+error})    
+    if (
+      !firstName?.trim() ||
+      !lastName?.trim() ||
+      !email.trim() ||
+      !password?.trim()
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "All field Must Required.." });
     }
-}
 
-const LoginUser = async(req,res) => {
-    
+    const ExistingUser = await UserModel.findOne({
+      email: email.trim().toLowerCase(),
+    });
+    if (ExistingUser)
+      return res.json({ success: false, message: "User already Exists" });
 
-    try{
-        
-        const {email,password} = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        if(!email || !password) {
-            return res.json({success:false,message:"All field Must Required.."})
-        }
+    const user = new UserModel({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
+    await user.save();
 
-        const user = await UserModel.findOne({email:email});
+    res.json({ success: true, message: "User Register Successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
 
-        if(!user) return res.json({success:false,message:"Invalid email Or Password"});
+const LoginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-
-        if(!await bcrypt.compare(password,user.password)){
-            return res.json({success:false,message:"Invalid email or Password"});
-        }
-
-        // token = jwt.sign({userid:user._id,email:user.email},secret_key,{expiresIn:'1h'})
-        token = jwt.sign({userid:user._id,email:user.email},secret_key);
-
-        res.json({success:true,token:token});
-
-    }catch(error){
-        console.log(error);
-        res.status(400).json({success:false,message:"Internal Server Error : "+error})    
+    if (!email.trim() || !password.trim()) {
+      return res.json({ success: false, message: "All field Must Required.." });
     }
-   
-}
 
-const GetUser = async(req,res) => {
+    const user = await UserModel.findOne({ email: email });
 
-    
-    try{
-        const {userid} = req.user;
-        
-        const user = await UserModel.findById({_id:userid});
-        res.json({success:true,user})    
-    
-    }catch(error){
-        console.log(error);
-        res.status(400).json({success:false,message:"Internal Server Error : "+error})    
+    if (!user)
+      return res.json({ success: false, message: "Invalid email Or Password" });
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      return res.json({ success: false, message: "Invalid email or Password" });
     }
-    
-    
-}
 
-module.exports = {SignupUser,LoginUser,GetUser}
+    // token = jwt.sign({userid:user._id,email:user.email},secret_key,{expiresIn:'1h'})
+    token = jwt.sign({ userid: user._id, email: user.email }, secret_key, {
+      expiresIn: "24h",
+    });
+    res.json({ success: true, token: token });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+const GetUser = async (req, res) => {
+  try {
+    const { userid } = req.user;
+    const user = await UserModel.findById(userid).select("-password");
+    res.json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ success: false, message: "Internal Server Error : " + error });
+  }
+};
+
+module.exports = { SignupUser, LoginUser, GetUser };
